@@ -59,5 +59,15 @@ namespace Application.Cryptographic
          
             return encrypted;
         }
+
+        public string Decrypt(string text)
+        {
+            using var aes = CreateAes();
+            ICryptoTransform decryptor = aes.CreateDecryptor();
+            using MemoryStream ms = new MemoryStream(Convert.FromBase64String(text));
+            using CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
+            using StreamReader reader = new StreamReader(cs);
+            return reader.ReadToEnd();
+        }
     }
 }
